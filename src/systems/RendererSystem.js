@@ -9,8 +9,8 @@ class RendererSystem extends System {
   // This method will get called on every frame by default
   execute(delta, time) {
     this.queries.renderables.results.forEach((entity) => {
-      var shape = entity.getComponent(Shape);
-      var position = entity.getComponent(Position);
+      const shape = entity.getComponent(Shape);
+      const position = entity.getComponent(Position);
       if (shape.primitive === "box") {
         this.drawBox(position);
       } else {
