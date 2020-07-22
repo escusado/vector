@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { FullContainer } from "src/dependencies/GlobalStyles";
 import { Canvas, useFrame } from "react-three-fiber";
+import { Engine } from 'src/lib/engine';
 
 function Box(props) {
   // This reference will give us direct access to the mesh
@@ -25,7 +26,7 @@ function Box(props) {
       <boxBufferGeometry attach="geometry" args={[1, 1, 1]} />
       <meshStandardMaterial
         attach="material"
-        color={hovered ? "hotpink" : "orange"}
+        color={hovered ? "blue" : "orange"}
       />
     </mesh>
   );
@@ -40,7 +41,6 @@ const HomeView = () => {
         <Box position={[-1.2, 0, 0]} />
         <Box position={[1.2, 0, 0]} />
       </Canvas>
-      ,
     </FullContainer>
   );
 };
