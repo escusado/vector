@@ -28,5 +28,7 @@ module.exports = {
   rules: {
     "prettier/prettier": "error",
     quotes: ["error", "double"],
+    "react/prop-types": [2, { ignore: ["children"] }],
+    "import/no-named-as-default": 0,
   },
 };
