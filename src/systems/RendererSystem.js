@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Canvas, useFrame } from "react-three-fiber";
 import { System } from "ecsy";
 import Renderable from "src/components/Renderable";
@@ -8,7 +8,7 @@ import Box from "src/elements/Box";
 
 class RendererSystem extends System {
   // This method will get called on every frame by default
-  execute(delta, time) {
+  execute() {
     return this.queries.renderables.results.map((entity) => {
       const shape = entity.getComponent(Shape);
       const position = entity.getComponent(Position);

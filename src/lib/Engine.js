@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { World } from "ecsy";
 import Velocity from "src/components/Velocity";
 import Position from "src/components/Position";
@@ -9,22 +9,33 @@ import RendererSystem from "src/systems/RendererSystem";
 import { Canvas, useFrame } from "react-three-fiber";
 
 const Engine = ({ children }) => {
-
-  var world = new World();
-  world.registerComponent(Velocity)
+  const container = useRef(<></>);
+  const world = new World();
+  world
+    .registerComponent(Velocity)
     .registerComponent(Position)
     .registerComponent(Shape)
     .registerComponent(Renderable)
     .registerSystem(MovableSystem)
-    .registerSystem(RendererSystem);
+    .registerSystem(RendererSystem, { container });
+
+  let lastTime = performance.now();
+  useFrame(() => {
+    // Compute delta and elapsed time
+    const time = performance.now();
+    const delta = time - lastTime;
+
+    // Run all the systems
+    world.execute(delta, time);
+
+    lastTime = time;
+  });
 
   return (
     <Canvas>
       <ambientLight />
       <pointLight position={[10, 10, 10]} />
-      <Box position={[-1.2, 0, 0]} />
-      <Box position={[1.2, 0, 0]} />
-      {children}
+      {container}
     </Canvas>
   );
 };

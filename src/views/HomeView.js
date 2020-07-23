@@ -1,10 +1,16 @@
 import React from "react";
 import { FullContainer } from "src/dependencies/GlobalStyles";
-import Engine from "src/lib/Engine";
+
+import VectorEngine from "src/lib/VectorEngine";
+
+// const SPEED_MULTIPLIER = 0.3;
+
+// const canvasWidth = window.innerWidth;
+// const canvasHeight = window.innerHeight;
 
 const HomeView = () => (
   <FullContainer>
-    <Engine />
+    <VectorEngine />
   </FullContainer>
 );
 
