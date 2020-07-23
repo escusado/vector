@@ -2,7 +2,7 @@ import React from "react";
 import { Canvas } from "react-three-fiber";
 import DroneVectorApp from "src/lib/DroneVectorApp";
 import { RendererContextProvider } from "src/lib/RendererContext";
-import { OrbitControls, softShadows } from "drei";
+import { OrbitControls, softShadows, Stats } from "drei";
 
 softShadows();
 
@@ -12,6 +12,7 @@ const VectorEngine = () => (
       <DroneVectorApp />
     </RendererContextProvider>
     <OrbitControls />
+    <Stats />
   </Canvas>
 );
 
