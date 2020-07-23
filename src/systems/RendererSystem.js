@@ -1,27 +1,42 @@
-import React, { useState } from "react";
-import { Canvas, useFrame } from "react-three-fiber";
+import React from "react";
 import { System } from "ecsy";
 import Renderable from "src/components/Renderable";
 import Shape from "src/components/Shape";
 import Position from "src/components/Position";
-import Box from "src/elements/Box";
+
+import { Box } from "drei";
 
 class RendererSystem extends System {
-  // This method will get called on every frame by default
+  init(attributes) {
+    this.context = attributes.context;
+  }
+
   execute() {
-    return this.queries.renderables.results.map((entity) => {
-      const shape = entity.getComponent(Shape);
+    const elements = [];
+    this.queries.renderables.results.forEach((entity) => {
       const position = entity.getComponent(Position);
-      if (shape.primitive === "box") {
-        return <Box position={position} />;
+      const shape = entity.getComponent(Shape);
+      const renderable = entity.getComponent(Renderable);
+
+      if (shape.type === "box") {
+        elements.push(
+          <Box
+            key={renderable.id}
+            rotation={[position.x, 0, position.y]}
+            castShadow
+            receiveShadow
+          >
+            <meshStandardMaterial attach="material" color={"hotpink"} />
+          </Box>,
+        );
       }
-      return null;
     });
+    this.context.setRendererContent(elements);
   }
 }
 
 RendererSystem.queries = {
-  renderables: { components: [Renderable, Shape] },
+  renderables: { components: [Renderable, Position, Shape] },
 };
 
 export default RendererSystem;
