@@ -9,34 +9,36 @@ import Velocity from "src/components/Velocity";
 import Position from "src/components/Position";
 import Shape from "src/components/Shape";
 import { useFrame } from "react-three-fiber";
+import Rotation from "src/components/Rotation";
+import { InputContext } from "src/lib/InputContext";
 
 const world = new World();
 let isInit = true;
 const DroneVectorApp = () => {
-  // console.log("DroneVectorApp...");
   const rendererContext = useContext(RendererContext);
+  const inputContext = useContext(InputContext);
 
   if (isInit) {
+    console.log("DroneVectorApp...");
     world
-      .registerSystem(MovableSystem)
+      .registerSystem(MovableSystem, { context: inputContext })
       .registerSystem(RendererSystem, { context: rendererContext })
       .registerComponent(Renderable)
       .registerComponent(Shape)
       .registerComponent(Velocity)
-      .registerComponent(Position);
+      .registerComponent(Position)
+      .registerComponent(Rotation);
 
     world
       .createEntity()
       .addComponent(Shape, { type: "box" })
-      .addComponent(Velocity, { x: 0.001, y: 0.001 })
+      .addComponent(Velocity, {
+        x: Math.random() / 100,
+        y: Math.random() / 100,
+        z: 0.0001,
+      })
       .addComponent(Position, { x: 0, y: 0 })
-      .addComponent(Renderable, { id: uuidv4() });
-
-    world
-      .createEntity()
-      .addComponent(Shape, { type: "box" })
-      .addComponent(Velocity, { x: 0.002, y: 0.002 })
-      .addComponent(Position, { x: 0, y: 0 })
+      .addComponent(Rotation)
       .addComponent(Renderable, { id: uuidv4() });
 
     isInit = false;
@@ -47,7 +49,6 @@ const DroneVectorApp = () => {
 
   return (
     <>
-      <fog attach="fog" args={["white", 0, 40]} />
       <ambientLight key="a0" intensity={0.4} />
       <directionalLight
         key="d0"

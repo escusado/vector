@@ -4,7 +4,9 @@ import Renderable from "src/components/Renderable";
 import Shape from "src/components/Shape";
 import Position from "src/components/Position";
 
-import { Box } from "drei";
+// import { Box } from "drei";
+import Box from "src/elements/Box";
+// import Rotation from "src/components/Rotation";
 
 class RendererSystem extends System {
   init(attributes) {
@@ -22,7 +24,7 @@ class RendererSystem extends System {
         elements.push(
           <Box
             key={renderable.id}
-            rotation={[position.x, 0, position.y]}
+            position={[position.x, position.z, position.y]}
             castShadow
             receiveShadow
           >
