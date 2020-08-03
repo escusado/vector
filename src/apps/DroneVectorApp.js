@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { RendererContext } from "src/lib/RendererContext";
 import { World } from "ecsy";
 import { v4 as uuidv4 } from "uuid";
@@ -12,13 +12,13 @@ import { useFrame } from "react-three-fiber";
 import Rotation from "src/components/Rotation";
 import { InputContext } from "src/lib/InputContext";
 
-const world = new World();
-let isInit = true;
 const DroneVectorApp = () => {
+  const [world] = useState(new World());
+
   const rendererContext = useContext(RendererContext);
   const inputContext = useContext(InputContext);
 
-  if (isInit) {
+  useEffect(() => {
     console.log("DroneVectorApp...");
     world
       .registerSystem(MovableSystem, { context: inputContext })
@@ -40,9 +40,8 @@ const DroneVectorApp = () => {
       .addComponent(Position, { x: 0, y: 0 })
       .addComponent(Rotation)
       .addComponent(Renderable, { id: uuidv4() });
+  }, []);
 
-    isInit = false;
-  }
   useFrame(({ clock }) => {
     world.execute(clock.getDelta(), clock.getElapsedTime());
   });

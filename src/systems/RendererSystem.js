@@ -1,11 +1,12 @@
 import React from "react";
 import { System } from "ecsy";
+import Elements from "src/elements";
 import Renderable from "src/components/Renderable";
 import Shape from "src/components/Shape";
 import Position from "src/components/Position";
 
 // import { Box } from "drei";
-import Box from "src/elements/Box";
+// import Box from "src/elements/Box";
 // import Rotation from "src/components/Rotation";
 
 class RendererSystem extends System {
@@ -15,21 +16,19 @@ class RendererSystem extends System {
 
   execute() {
     const elements = [];
+
     this.queries.renderables.results.forEach((entity) => {
       const position = entity.getComponent(Position);
       const shape = entity.getComponent(Shape);
       const renderable = entity.getComponent(Renderable);
+      const RendereableElement = Elements[shape.type];
 
-      if (shape.type === "box") {
+      if (RendereableElement) {
         elements.push(
-          <Box
+          <RendereableElement
             key={renderable.id}
             position={[position.x, position.z, position.y]}
-            castShadow
-            receiveShadow
-          >
-            <meshStandardMaterial attach="material" color={"hotpink"} />
-          </Box>,
+          />,
         );
       }
     });
