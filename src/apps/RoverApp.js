@@ -10,6 +10,7 @@ import Position from "src/components/Position";
 import Rotation from "src/components/Rotation";
 import { v4 as uuidv4 } from "uuid";
 import { useFrame } from "react-three-fiber";
+import { Sphere } from "drei";
 
 const RoverApp = () => {
   const [world] = useState(new World());
@@ -34,7 +35,7 @@ const RoverApp = () => {
         y: Math.random() / 100,
         z: 0.0001,
       })
-      .addComponent(Position, { x: 0, y: 0, z: 2 })
+      .addComponent(Position, { x: 0, y: 0, z: 0 })
       .addComponent(Renderable, { id: uuidv4() });
   }, []);
 
@@ -42,7 +43,20 @@ const RoverApp = () => {
     world.execute(clock.getDelta(), clock.getElapsedTime());
   });
 
-  return <RoverStage> {rendererContext.rendererContent}</RoverStage>;
+  return (
+    <RoverStage>
+      {" "}
+      <Sphere castShadow receiveShadow position={[0, 2, 0]} args={[2, 24, 24]}>
+        <meshPhongMaterial
+          color="royalblue"
+          roughness={0}
+          metalness={0.1}
+          attach="material"
+        />
+      </Sphere>
+      {rendererContext.rendererContent}
+    </RoverStage>
+  );
 };
 
 export default RoverApp;

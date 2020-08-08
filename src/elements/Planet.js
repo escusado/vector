@@ -1,10 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
-import Perlin from "src/lib/perlin";
+import { generateTerrainMap } from "src/lib/generateTerrainMap.ts";
 
-Perlin.seed();
-
-const SIZE = 10;
-const SEGMENTS_PER_SIDE = 20;
+const SIZE = 120;
+const SEGMENTS_PER_SIDE = 17;
 
 const Planet = (props) => {
   const mesh = useRef();
@@ -14,35 +12,27 @@ const Planet = (props) => {
 
   useEffect(() => {
     const vertices = geometry.current.attributes.position.array;
-
-    let currentVertex = 0;
-
+    const generatedTerrain = generateTerrainMap(SEGMENTS_PER_SIDE, 48);
+    const flatGeneratedTerrain = [].concat(...generatedTerrain);
     for (let i = 0; i < vertices.length; i += 3) {
-      vertices[i + 2] = Perlin.get(i / 11, currentVertex);
-      console.log(
-        ">>s>",
-        currentVertex,
-        ":",
-        i / 11,
-        vertices[i],
-        vertices[i + 1],
-        vertices[i + 2],
-        Perlin.get(i / 11, currentVertex),
-      );
-      currentVertex += 1;
+      // new Z value for vertex
+      vertices[i + 2] = flatGeneratedTerrain[i / 3] / 10;
     }
-    // for (let i = 0, j = 0, l = vertices.length; i < l; i += 1, j += 3) {
-    //   vertices[j + 1] = data[i] * 10;
-    // }
     setTerrainData(vertices);
   }, []);
 
   return (
-    <mesh {...props} ref={mesh} rotation={[-Math.PI / 2, 0, 0]}>
+    <mesh
+      {...props}
+      ref={mesh}
+      rotation={[-Math.PI / 2, 0, 0]}
+      castShadow
+      receiveShadow
+    >
       <planeBufferGeometry
         attach="geometry"
         ref={geometry}
-        args={[SIZE, SIZE, SEGMENTS_PER_SIDE, SEGMENTS_PER_SIDE]}
+        args={[SIZE, SIZE, SEGMENTS_PER_SIDE - 1, SEGMENTS_PER_SIDE - 1]}
       >
         {terrainData && (
           <bufferAttribute
@@ -56,19 +46,11 @@ const Planet = (props) => {
       <meshStandardMaterial
         attach="material"
         color={"hotpink"}
-        wireframe={true}
+        // wireframe={true}
+        flatShading={true}
       />
     </mesh>
   );
 };
 
 export default Planet;
-
-{
-  /* <planeBufferGeometry
-  attach="geometry"
-  ref={geometry}
-  args={[10, 10, 5, 5]}
-  // attributes-position-array={}
-/> */
-}
