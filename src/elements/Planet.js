@@ -1,30 +1,39 @@
-import React, { useRef, useEffect, useState } from "react";
-import { generateTerrainMap } from "src/lib/generateTerrainMap.ts";
+import React, { useRef, useEffect, useState, useMemo } from "react";
+import { generateTerrainMap } from "src/lib/generateTerrainMap";
+import { usePlane } from "use-cannon";
+import * as THREE from "three";
 
 const SIZE = 120;
 const SEGMENTS_PER_SIDE = 17;
 
 const Planet = (props) => {
-  const mesh = useRef();
+  const generatedTerrain = generateTerrainMap(SEGMENTS_PER_SIDE, 48);
+  const flatGeneratedTerrain = [].concat(...generatedTerrain);
   const geometry = useRef();
 
   const [terrainData, setTerrainData] = useState();
+  const [meshRef] = usePlane(() => ({
+    rotation: [-Math.PI / 2, 0, 0],
+    vertices: terrainData,
+  }));
 
   useEffect(() => {
     const vertices = geometry.current.attributes.position.array;
-    const generatedTerrain = generateTerrainMap(SEGMENTS_PER_SIDE, 48);
-    const flatGeneratedTerrain = [].concat(...generatedTerrain);
     for (let i = 0; i < vertices.length; i += 3) {
       // new Z value for vertex
       vertices[i + 2] = flatGeneratedTerrain[i / 3] / 10;
     }
     setTerrainData(vertices);
-  }, []);
+    // ref.vertices = vertices;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    console.log(">", meshRef);
+    debugger;
+  }, [meshRef]);
 
   return (
     <mesh
+      ref={meshRef}
       {...props}
-      ref={mesh}
       rotation={[-Math.PI / 2, 0, 0]}
       castShadow
       receiveShadow

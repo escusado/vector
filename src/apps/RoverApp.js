@@ -10,11 +10,25 @@ import Position from "src/components/Position";
 import Rotation from "src/components/Rotation";
 import { v4 as uuidv4 } from "uuid";
 import { useFrame } from "react-three-fiber";
-import { Sphere } from "drei";
+import { Physics, useBox } from "use-cannon";
+
+function Cube(props) {
+  const [ref] = useBox(() => ({
+    mass: 1,
+    position: [0, 5, 0],
+    rotation: [0.4, 0.2, 0.5],
+    ...props,
+  }));
+  return (
+    <mesh receiveShadow castShadow ref={ref}>
+      <boxBufferGeometry attach="geometry" />
+      <meshLambertMaterial attach="material" color="hotpink" />
+    </mesh>
+  );
+}
 
 const RoverApp = () => {
   const [world] = useState(new World());
-
   const rendererContext = useContext(RendererContext);
 
   useEffect(() => {
@@ -37,6 +51,7 @@ const RoverApp = () => {
       })
       .addComponent(Position, { x: 0, y: 0, z: 0 })
       .addComponent(Renderable, { id: uuidv4() });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useFrame(({ clock }) => {
@@ -45,16 +60,10 @@ const RoverApp = () => {
 
   return (
     <RoverStage>
-      {" "}
-      <Sphere castShadow receiveShadow position={[0, 2, 0]} args={[2, 24, 24]}>
-        <meshPhongMaterial
-          color="royalblue"
-          roughness={0}
-          metalness={0.1}
-          attach="material"
-        />
-      </Sphere>
-      {rendererContext.rendererContent}
+      <Physics>
+        <Cube></Cube>
+        {rendererContext.rendererContent}
+      </Physics>
     </RoverStage>
   );
 };

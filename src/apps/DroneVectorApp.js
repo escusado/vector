@@ -40,6 +40,7 @@ const DroneVectorApp = () => {
       .addComponent(Position, { x: 0, y: 0 })
       .addComponent(Rotation)
       .addComponent(Renderable, { id: uuidv4() });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useFrame(({ clock }) => {

@@ -1,5 +1,4 @@
 import React, { createContext, useState } from "react";
-import { Text } from "drei";
 
 export const RendererContext = createContext(null);
 

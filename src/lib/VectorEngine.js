@@ -2,6 +2,7 @@ import React from "react";
 import { Canvas } from "react-three-fiber";
 import { RendererContextProvider } from "src/lib/RendererContext";
 import { OrbitControls, Stats, softShadows } from "drei";
+
 import { InputContextProvider } from "./InputContext";
 
 softShadows();

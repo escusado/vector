@@ -1,5 +1,5 @@
-import React, { createContext, useState, useEffect } from "react";
-import { useKeyUp, useKeyDown, useKeyCombo } from "react-keyboard-input-hook";
+import React, { createContext, useState } from "react";
+import { useKeyDown } from "react-keyboard-input-hook";
 
 export const InputContext = createContext(null);
 
