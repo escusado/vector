@@ -15,7 +15,7 @@ import { Physics, useBox } from "use-cannon";
 function Cube(props) {
   const [ref] = useBox(() => ({
     mass: 1,
-    position: [0, 5, 0],
+    position: [5, 15, 5],
     rotation: [0.4, 0.2, 0.5],
     ...props,
   }));
